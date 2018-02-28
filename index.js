@@ -34,11 +34,7 @@ function Authorizer () {
   return {
     authorize: function (req, cb) {
       console.info('authorize : req =', req)
-      var rsp = {
-        scope: 'write'
-      }
-      console.info('authorize : rsp =', rsp)
-      cb(null, rsp)
+      cb(null, true)
     }
   }
 }
@@ -53,8 +49,9 @@ function Session () {
       cb(null, null)
     },
     get: function (key, cb) {
-      console.info('get session : key=' + key)
-      cb(null, sessions[key])
+      var session = sessions[key]
+      console.info('get session : key=' + key + ' | session =', session)
+      cb(null, session)
     }
   }
 }
