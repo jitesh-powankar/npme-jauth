@@ -1,23 +1,22 @@
 module.exports = {
   Authenticator,
-	Authorizer,
-	Session
+  Authorizer,
+  Session
 }
 
 const crypto = require('crypto')
-const sessions = {}
 
 function Authenticator () {
   return {
-    authenticate: function (cred, cb) {
-      console.info('authenticate : cred=' + cred)
+    authenticate: function (req, cb) {
+      console.info('authenticate : req =', req)
       crypto.randomBytes(32, function (error, buffer) {
         if (error) {
           console.error('authenticate : error =>', error)
           cb(error)
         } else {
           const token = buffer.toString('hex')
-          console.info('authenticate : token=' + token)
+          console.info('authenticate : new token =', token)
           cb(null, {
             token,
             user: {
@@ -33,19 +32,23 @@ function Authenticator () {
 
 function Authorizer () {
   return {
-    authorize: function (rq, cb) {
-      console.info('authorize : rq=' + rq)
-      cb(null, {
-        scope: read
-      })
+    authorize: function (req, cb) {
+      console.info('authorize : req =', req)
+      var rsp = {
+        scope: 'write'
+      }
+      console.info('authorize : rsp =', rsp)
+      cb(null, rsp)
     }
   }
 }
 
 function Session () {
+  const sessions = {}
+
   return {
     set: function (key, session, cb) {
-      console.info('set session : key=' + key + ' | session=' + session)
+      console.info('set session : key=' + key + ' | session =', session)
       sessions[key] = session
       cb(null, null)
     },
