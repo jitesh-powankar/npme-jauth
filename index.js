@@ -8,16 +8,16 @@ const crypto = require('crypto')
 
 function Authenticator () {
   return {
-    authenticate: function (req, cb) {
-      console.info('authenticate : req =', req)
+    authenticate: function (request, callback) {
+      console.info('authenticate : request =', request)
       crypto.randomBytes(32, function (error, buffer) {
         if (error) {
           console.error('authenticate : error =>', error)
-          cb(error)
+          callback(error)
         } else {
           const token = buffer.toString('hex')
           console.info('authenticate : new token =', token)
-          cb(null, {
+          callback(null, {
             token,
             user: {
               email: 'buzuli@ed-craft.com',
@@ -32,9 +32,9 @@ function Authenticator () {
 
 function Authorizer () {
   return {
-    authorize: function (req, cb) {
-      console.info('authorize : req =', req)
-      cb(null, true)
+    authorize: function (request, callback) {
+      console.info('authorize : request =', request)
+      callback(null, true)
     }
   }
 }
@@ -43,15 +43,15 @@ function Session () {
   const sessions = {}
 
   return {
-    set: function (key, session, cb) {
+    set: function (key, session, callback) {
       console.info('set session : key=' + key + ' | session =', session)
       sessions[key] = session
-      cb(null, null)
+      callback(null, null)
     },
-    get: function (key, cb) {
+    get: function (key, callback) {
       var session = sessions[key]
       console.info('get session : key=' + key + ' | session =', session)
-      cb(null, session)
+      callback(null, session)
     }
   }
 }
